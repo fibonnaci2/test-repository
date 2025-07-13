@@ -1,9 +1,29 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="status3.js" defer></script>
+    <link rel="stylesheet" href="status3.css">
   </head>
   <body>
-    <h1>Hello World</h1>
+    <div id="container">
+      <div>
+        <div id="navBlock">
+          <div id="navContainer">
+            <button class="navButton" data-section="diep">diep</button>
+            <button class="navButton" data-section="arras">arras</button>
+            <button class="navButton" data-section="arras-sandbox">arras sandbox</button>
+            <button class="navButton" data-section="woomy">woomy</button>
+          </div>
+        </div>
+        <div id="mainBlock">
+          <h1 id="heading">Loading...</h1>
+          <h2 id="totalPlayers">0</h2>
+          <h2 id="totalChange">0</h2>
+          <div id="servers"></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
