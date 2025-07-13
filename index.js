@@ -556,30 +556,6 @@ const woomy = (() => {
     return content;
   }
 
-  function createRegionHeader(region, totalPlayers) {
-    const regionString = region.regionName;
-    const regionCharacters = regionString.split("");
-    const regionHTML = regionCharacters.map((character, index) => {
-      return `<div class="bounceLetter" style="
-        animation-delay: ${0.5 * (index - regionCharacters.length)}s;
-      ">${character}</div>`;
-    }).join("");
-
-    const regionName = document.createElement("p");
-    regionName.className = "regionName";
-    regionName.innerHTML = regionHTML;
-
-    const regionPlayers = document.createElement("p");
-    regionPlayers.className = "regionPlayers";
-    regionPlayers.innerText = region.numPlayers;
-
-    const regionPercentage = document.createElement("p");
-    regionPercentage.className = "regionPercentage";
-    regionPercentage.innerText = (100 * region.numPlayers / totalPlayers).toFixed(1);
-
-    return [regionName, regionPlayers, regionPercentage];
-  }
-
   function createServerContainer(lobby) {
     const lobbyContainer = document.createElement("div");
     lobbyContainer.className = "lobbyContainer inlineGrid";
@@ -631,7 +607,79 @@ const woomy = (() => {
   }
 })();
 
-let currentlySelected = "diep";
+const agar = (() => {
+  async function fetchData() {
+    const url = "https://webbouncer-live-v8-0.agario.miniclippt.com/info";
+    const response = await fetch(url);
+    const content = await response.json();
+    return content;
+  }
+
+  function createRegionHeader(name, region, totalPlayers) {
+    const regionString = name;
+    const regionCharacters = regionString.split("");
+    const regionHTML = regionCharacters.map((character, index) => {
+      return `<div class="bounceLetter" style="
+        animation-delay: ${0.5 * (index - regionCharacters.length)}s;
+      ">${character}</div>`;
+    }).join("");
+
+    const regionName = document.createElement("p");
+    regionName.className = "regionName";
+    regionName.innerHTML = regionHTML;
+
+    const regionPlayers = document.createElement("p");
+    regionPlayers.className = "regionPlayers";
+    regionPlayers.innerText = region.numPlayers;
+
+    const regionPercentage = document.createElement("p");
+    regionPercentage.className = "regionPercentage";
+    regionPercentage.innerText = (100 * region.numPlayers / totalPlayers).toFixed(1);
+
+    return [regionName, regionPlayers, regionPercentage];
+  }
+
+  function createRegionContainer(name, region, totalPlayers) {
+    const container = document.createElement("div");
+    container.className = "regionContainer";
+
+    container.style.float = "none";
+    container.style.width = "100%";
+
+    createRegionHeader(name, region, totalPlayers).forEach((element) => {
+      container.appendChild(element);
+    });
+
+    return container;
+  }
+
+  function updateTotalChange() {
+    elements("totalChange").hidden = true;
+  }
+
+  function displayData(content) {
+    elements("heading").innerText = "agar.io";
+
+    const container = elements("servers");
+
+    container.innerHTML = "";
+
+    const totalPlayerCount = content.totals.numPlayers;
+    elements("totalPlayers").innerText = totalPlayerCount;
+    
+    updateTotalChange();
+
+    Object.entries(content.regions).forEach(([name, region]) => {
+      const serverContainer = createRegionContainer(name, region, totalPlayerCount);
+      container.appendChild(serverContainer);
+    });
+  }
+  return () => {
+    fetchData().then(displayData);
+  }
+})();
+
+let currentlySelected = "agar";
 function refreshServers() {
   if (currentlySelected === "diep") {
     diep();
@@ -641,6 +689,9 @@ function refreshServers() {
   }
   if (currentlySelected === "woomy") {
     woomy();
+  }
+  if (currentlySelected === "agar") {
+    agar();
   }
 }
 
