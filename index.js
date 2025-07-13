@@ -644,7 +644,7 @@ const agar = (() => {
     container.className = "regionContainer";
 
     container.style.float = "none";
-    container.style.width = "100%";
+    container.style.width = "auto";
 
     createRegionHeader(name, region, totalPlayers).forEach((element) => {
       container.appendChild(element);
